@@ -1,6 +1,8 @@
 package cerberus.HealthCare.user.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -42,9 +44,26 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<Role> roles = new ArrayList<>();
+
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    public enum Role {
+        ADMIN, USER
+    }
+
+    public User(String email, String encodedPassword, List<Role> roleUser, String nickname, LocalDate birthday) {
+        this.email = email;
+        this.encryptPwd = encodedPassword;
+        this.roles = roleUser;
+        this.nickname = nickname;
+        this.birthday = birthday;
+    }
+
 }
 
