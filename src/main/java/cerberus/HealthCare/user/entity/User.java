@@ -31,7 +31,7 @@ public class User {
 
     private String nickname;
 
-    private String gender;
+    private String gender;  //male or female
 
     @Column(name = "sleep_pattern")
     private String sleepPattern;
@@ -57,12 +57,13 @@ public class User {
         ADMIN, USER
     }
 
-    public User(String email, String encodedPassword, List<Role> roleUser, String nickname, LocalDate birthday) {
+    public User(String email, String encodedPassword, List<Role> roleUser, String nickname, LocalDate birthday, String gender) {
         this.email = email;
         this.encryptPwd = encodedPassword;
         this.roles = roleUser;
         this.nickname = nickname;
         this.birthday = birthday;
+        this.gender = gender;
     }
 
 }

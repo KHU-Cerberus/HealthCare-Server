@@ -13,9 +13,10 @@ public class SignUpRequest {
     String password;
     String nickname;
     LocalDate birthday;
+    String gender;
 
     public User toUser(String encodedPassword) {
-        return new User(email, encodedPassword, List.of(User.Role.USER), nickname, birthday);
+        return new User(email, encodedPassword, List.of(User.Role.USER), nickname, birthday, gender);
     }
 }
 
