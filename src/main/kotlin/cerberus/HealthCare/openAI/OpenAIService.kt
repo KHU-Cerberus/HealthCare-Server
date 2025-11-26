@@ -10,11 +10,11 @@ import com.aallam.openai.client.OpenAI
 class ChatGPT(
     private val apikey: String,
 ){
-    var client = OpenAI(apikey)
+    private val client = OpenAI(apikey)
 
-    suspend fun getCompletionMessage(openAI: OpenAI, prompt: String): String {
+    suspend fun getCompletionMessage(prompt: String): String {
         val chatCompletionRequest = ChatCompletionRequest(
-            model = ModelId("gpt-3.5-turbo"),
+            model = ModelId("gpt-4o-mini"),
             messages = listOf(
                 ChatMessage(
                     role = ChatRole.User,
@@ -23,7 +23,7 @@ class ChatGPT(
             )
         )
 
-        val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
+        val completion: ChatCompletion = client.chatCompletion(chatCompletionRequest)
 
         return completion.choices.firstOrNull()?.message?.content ?: "failed to get response."
     }
@@ -31,6 +31,6 @@ class ChatGPT(
     // java-friendly wrapper
     fun getCompletionMessageBlocking(prompt: String): String =
         kotlinx.coroutines.runBlocking {
-            getCompletionMessage(client, prompt)
+            getCompletionMessage(prompt)
         }
 }
