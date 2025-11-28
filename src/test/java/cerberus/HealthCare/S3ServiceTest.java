@@ -43,4 +43,11 @@ public class S3ServiceTest {
 
         System.out.println("Download Presigned URL: " + url);
     }
+
+    @Test
+    void testDeleteImage() throws Exception {
+        String key = "test/test-upload.txt";
+        s3Service.deleteImageBlocking(key);
+        System.out.println("delete success!");
+    }
 }
