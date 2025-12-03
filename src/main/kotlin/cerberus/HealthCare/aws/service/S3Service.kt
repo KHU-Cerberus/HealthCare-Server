@@ -1,4 +1,4 @@
-package cerberus.HealthCare
+package cerberus.HealthCare.aws.service
 
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*

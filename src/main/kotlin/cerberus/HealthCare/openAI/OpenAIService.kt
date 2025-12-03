@@ -1,4 +1,4 @@
-package cerberus.HealthCare;
+package cerberus.HealthCare.openAI;
 
 import com.aallam.openai.api.chat.ChatCompletion
 import com.aallam.openai.api.chat.ChatCompletionRequest

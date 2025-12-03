@@ -1,5 +1,6 @@
 package cerberus.HealthCare;
 
+import cerberus.HealthCare.openAI.ChatGPT;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
