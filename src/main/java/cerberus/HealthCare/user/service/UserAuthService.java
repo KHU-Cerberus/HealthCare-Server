@@ -4,6 +4,7 @@ import cerberus.HealthCare.global.exception.CoreException;
 import cerberus.HealthCare.global.exception.code.UserErrorCode;
 import cerberus.HealthCare.global.security.JwtToken;
 import cerberus.HealthCare.global.security.JwtTokenProvider;
+import cerberus.HealthCare.user.dto.LoginResponse;
 import cerberus.HealthCare.user.dto.SignUpRequest;
 import cerberus.HealthCare.user.dto.SignUpResponse;
 import cerberus.HealthCare.user.entity.User;
@@ -29,7 +30,7 @@ public class UserAuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public JwtToken login(String email, String password) {
+    public LoginResponse login(String email, String password) {
         log.info("AuthenticationToken 생성: email={}", email);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
@@ -37,7 +38,12 @@ public class UserAuthService {
         log.info("Authentication 성공: email={}", email);
         JwtToken token = jwtTokenProvider.generateToken(authentication);
         log.info("JWT 토큰 생성 완료: email={}", email);
-        return token;
+
+        User user = userAuthRepository.findByEmail(email)
+            .orElseThrow(() -> new CoreException(UserErrorCode.USER_NOT_FOUND));
+
+        return new LoginResponse(token.getGrantType(), token.getAccessToken(),
+            token.getRefreshToken(), user.getSleepPattern());
     }
 
     @Transactional

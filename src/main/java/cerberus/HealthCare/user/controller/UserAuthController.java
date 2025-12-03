@@ -3,6 +3,7 @@ package cerberus.HealthCare.user.controller;
 import cerberus.HealthCare.global.common.BaseResponse;
 import cerberus.HealthCare.global.security.JwtToken;
 import cerberus.HealthCare.user.dto.LoginRequest;
+import cerberus.HealthCare.user.dto.LoginResponse;
 import cerberus.HealthCare.user.dto.SignUpRequest;
 import cerberus.HealthCare.user.dto.SignUpResponse;
 import cerberus.HealthCare.user.service.UserAuthService;
@@ -30,9 +31,9 @@ public class UserAuthController {
         @ApiResponse(responseCode = "401", description = "이메일 또는 비밀번호가 일치하지 않습니다.")
     })
     @PostMapping("/login")
-    public ResponseEntity<BaseResponse<JwtToken>> login(@RequestBody LoginRequest loginRequest){
-        JwtToken jwtToken = userAuthService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        return BaseResponse.ok("로그인 성공", jwtToken);
+    public ResponseEntity<BaseResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest){
+        LoginResponse response = userAuthService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        return BaseResponse.ok("로그인 성공", response);
     }
 
     @Operation(summary = "회원가입", description = "사용자 회원가입")
