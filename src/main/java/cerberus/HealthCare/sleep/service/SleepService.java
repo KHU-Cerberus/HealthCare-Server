@@ -1,14 +1,17 @@
 package cerberus.HealthCare.sleep.service;
 
 import cerberus.HealthCare.global.exception.CoreException;
+import cerberus.HealthCare.global.exception.code.CommonErrorCode;
 import cerberus.HealthCare.global.exception.code.UserErrorCode;
 import cerberus.HealthCare.sleep.dto.CreateSleepResponse;
+import cerberus.HealthCare.sleep.dto.DeleteSleepRequest;
+import cerberus.HealthCare.sleep.dto.EditSleepRequest;
+import cerberus.HealthCare.sleep.dto.EditSleepResponse;
 import cerberus.HealthCare.sleep.dto.SleepLog24HResponse;
 import cerberus.HealthCare.sleep.entity.SleepLog;
 import cerberus.HealthCare.sleep.repository.SleepRepository;
 import cerberus.HealthCare.user.entity.User;
 import cerberus.HealthCare.user.repository.UserRepository;
-import cerberus.HealthCare.user.service.UserService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -62,5 +65,28 @@ public class SleepService {
         return logs.stream()
             .map(SleepLog24HResponse::fromEntity)
             .toList();
+    }
+
+    @Transactional
+    public void deleteSleep(String username, DeleteSleepRequest request) {
+        User user = userRepository.findByEmail(username)
+            .orElseThrow(() -> new CoreException(UserErrorCode.USER_NOT_FOUND));
+        SleepLog sleep = sleepRepository.findByIdAndUser(request.getSleepId(), user)
+            .orElseThrow(() -> new CoreException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        sleepRepository.delete(sleep);
+    }
+
+    @Transactional
+    public EditSleepResponse editSleep(String username, EditSleepRequest request) {
+        User user = userRepository.findByEmail(username)
+            .orElseThrow(() -> new CoreException(UserErrorCode.USER_NOT_FOUND));
+        SleepLog sleep = sleepRepository.findByIdAndUser(request.getSleepId(), user)
+            .orElseThrow(() -> new CoreException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+
+        sleep.setStart(parse(request.getStart()));
+        sleep.setEndTime(parse(request.getEnd()));
+        return new EditSleepResponse(request.getSleepId(), request.getStart(), request.getEnd());
     }
 }

@@ -34,6 +34,11 @@ public class BaseResponse<T> {
     public static <T> ResponseEntity<BaseResponse<T>> created(String message, T body) {
         return of(HttpStatus.CREATED, message, body);
     }
+
+    public static <T> ResponseEntity<BaseResponse<T>> noContent(String message, T body) {
+        return of(HttpStatus.NO_CONTENT, message, body);
+    }
+
     public static <T> ResponseEntity<BaseResponse<T>> badRequest(String message, T body) {
         return of(HttpStatus.BAD_REQUEST, message, body);
     }
