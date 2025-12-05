@@ -12,6 +12,7 @@ import cerberus.HealthCare.sleep.entity.SleepLog;
 import cerberus.HealthCare.sleep.repository.SleepRepository;
 import cerberus.HealthCare.user.entity.User;
 import cerberus.HealthCare.user.repository.UserRepository;
+import cerberus.HealthCare.user.service.ReportService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,6 +29,7 @@ public class SleepService {
 
     private final SleepRepository sleepRepository;
     private final UserRepository userRepository;
+    private final ReportService reportService;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -48,8 +50,11 @@ public class SleepService {
             .start(startTime)
             .endTime(endTime)
             .build();
-
         sleepRepository.save(sleepLog);
+
+        reportService.updateReportAsync(user, endTime);
+
+        log.info("[createSleep END] {}", Thread.currentThread().getName());
         return new CreateSleepResponse(user.getId(), sleepLog.getId(), start, end);
     }
 
@@ -73,8 +78,13 @@ public class SleepService {
             .orElseThrow(() -> new CoreException(UserErrorCode.USER_NOT_FOUND));
         SleepLog sleep = sleepRepository.findByIdAndUser(request.getSleepId(), user)
             .orElseThrow(() -> new CoreException(CommonErrorCode.RESOURCE_NOT_FOUND));
+        LocalDateTime endTime = sleep.getEndTime();
 
         sleepRepository.delete(sleep);
+
+        reportService.updateReportAsync(user, endTime);
+
+        log.info("[deleteSleep END] {}", Thread.currentThread().getName());
     }
 
     @Transactional
@@ -84,9 +94,12 @@ public class SleepService {
         SleepLog sleep = sleepRepository.findByIdAndUser(request.getSleepId(), user)
             .orElseThrow(() -> new CoreException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-
         sleep.setStart(parse(request.getStart()));
         sleep.setEndTime(parse(request.getEnd()));
+
+        reportService.updateReportAsync(user, sleep.getEndTime());
+
+        log.info("[editSleep END] {}", Thread.currentThread().getName());
         return new EditSleepResponse(request.getSleepId(), request.getStart(), request.getEnd());
     }
 }

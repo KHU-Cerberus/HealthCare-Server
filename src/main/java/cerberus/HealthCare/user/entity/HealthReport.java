@@ -26,5 +26,11 @@ public class HealthReport {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    public HealthReport(LocalDate date, User user) {
+        this.date = date;
+        this.user = user;
+    }
 }
 

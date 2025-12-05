@@ -1,4 +1,4 @@
-package cerberus.HealthCare.user.dto;
+package cerberus.HealthCare.user.dto.report;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

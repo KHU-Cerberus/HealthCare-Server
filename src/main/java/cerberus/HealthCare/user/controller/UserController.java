@@ -2,9 +2,8 @@ package cerberus.HealthCare.user.controller;
 
 import cerberus.HealthCare.global.common.BaseResponse;
 import cerberus.HealthCare.global.security.CustomUserDetails;
-import cerberus.HealthCare.global.security.JwtToken;
-import cerberus.HealthCare.user.dto.HealthReportResponse;
-import cerberus.HealthCare.user.dto.LoginRequest;
+import cerberus.HealthCare.user.dto.report.HealthAnalysisResponse;
+import cerberus.HealthCare.user.dto.report.HealthReportResponse;
 import cerberus.HealthCare.user.dto.SleepPatternRequest;
 import cerberus.HealthCare.user.dto.SleepPatternResponse;
 import cerberus.HealthCare.user.service.UserService;
@@ -13,10 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
-import java.util.Date;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,10 +51,25 @@ public class UserController {
         @ApiResponse(responseCode = "401", description = "유저를 찾을 수 없습니다")
     })
     @GetMapping("/report/{date}")
-    public ResponseEntity<BaseResponse<HealthReportResponse>> getHealthReport(
+    public ResponseEntity<BaseResponse<HealthAnalysisResponse>> getHealthReport(
         @PathVariable LocalDate date,
         @AuthenticationPrincipal CustomUserDetails userDetails) {
-        HealthReportResponse healthReportResponse = userService.getHealthReport(userDetails.getUsername(), date);
+        HealthAnalysisResponse healthAnalysisResponse = userService.getHealthReport(userDetails.getUsername(), date);
+        return BaseResponse.ok("건강리포트 조회 완료", healthAnalysisResponse);
+    }
+
+    @Operation(summary = "건강리포트 조회", description = "사용자 건강 리포트 조회")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "건강리포트 조회 완료"),
+        @ApiResponse(responseCode = "401", description = "유저를 찾을 수 없습니다")
+    })
+    @GetMapping("/report/{date}/2")
+    public ResponseEntity<BaseResponse<HealthReportResponse>> getHealthReport2(
+        @PathVariable LocalDate date,
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
+        HealthReportResponse healthReportResponse = userService.getHealthReport2(userDetails.getUsername(), date);
         return BaseResponse.ok("건강리포트 조회 완료", healthReportResponse);
     }
+
+
 }
