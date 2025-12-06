@@ -9,8 +9,14 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.imageio.ImageIO
+import org.springframework.stereotype.Service
+import org.springframework.beans.factory.annotation.Value;
 
-class LogMealService(private val apiToken: String) {
+@Service
+class LogMealService(
+    @Value("\${logmeal.api-token}")
+    private val apiToken: String
+) {
 
     companion object {
         private const val BASE_URL = "https://api.logmeal.com/v2"
