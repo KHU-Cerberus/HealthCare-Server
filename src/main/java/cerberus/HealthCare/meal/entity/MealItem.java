@@ -25,7 +25,6 @@ public class MealItem {
     @JoinColumn(name = "meal_id")
     private Meal meal;
 
-    private String mass;
     private Double calories; //칼로리
     private Double totalFat;         // 총 지방
     private Double saturatedFat; // 포화지방

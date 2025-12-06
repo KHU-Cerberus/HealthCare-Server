@@ -2,10 +2,12 @@ package cerberus.HealthCare.sleep.repository;
 
 import cerberus.HealthCare.sleep.entity.SleepLog;
 import cerberus.HealthCare.user.entity.User;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface SleepRepository extends JpaRepository<SleepLog, Long> {
 
@@ -14,5 +16,12 @@ public interface SleepRepository extends JpaRepository<SleepLog, Long> {
     Optional<SleepLog> findByIdAndUser(Long id, User user);
 
     List<SleepLog> findByUserIdAndStartBetween(Long userId, LocalDateTime start, LocalDateTime end);
+
+    @Query("""
+    SELECT s FROM SleepLog s
+    WHERE s.user.id = :userId
+    AND DATE(s.endTime) = :today
+    """)
+    List<SleepLog> findSleepsEndedToday(Long userId, LocalDate today);
 
 }

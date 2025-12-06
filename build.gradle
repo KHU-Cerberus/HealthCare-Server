@@ -41,6 +41,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Lombok (test)
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
     /* ------------------------ DB ------------------------ */
     runtimeOnly 'com.mysql:mysql-connector-j'
 

@@ -3,6 +3,7 @@ package cerberus.HealthCare.user.controller;
 import cerberus.HealthCare.global.common.BaseResponse;
 import cerberus.HealthCare.global.security.CustomUserDetails;
 import cerberus.HealthCare.user.dto.HealthAdviceResponse;
+import cerberus.HealthCare.user.dto.HomeResponse;
 import cerberus.HealthCare.user.dto.report.HealthAnalysisResponse;
 import cerberus.HealthCare.user.dto.report.HealthReportResponse;
 import cerberus.HealthCare.user.dto.SleepPatternRequest;
@@ -59,7 +60,7 @@ public class UserController {
         return BaseResponse.ok("건강리포트 조회 완료", healthAnalysisResponse);
     }
 
-    @Operation(summary = "건강리포트 조회", description = "사용자 건강 리포트 조회")
+    @Operation(summary = "건강리포트 조회2", description = "사용자 건강 리포트 조회")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "건강리포트 조회 완료"),
         @ApiResponse(responseCode = "401", description = "유저를 찾을 수 없습니다")
@@ -83,6 +84,19 @@ public class UserController {
         @AuthenticationPrincipal CustomUserDetails userDetails) {
         HealthAdviceResponse healthAdviceResponse = userService.getHealthAdvice(userDetails.getUsername(), type);
         return BaseResponse.ok("건강 조언 조회 완료", healthAdviceResponse);
+    }
+
+    @Operation(summary = "홈화면 조회", description = "사용자 홈화면 조회")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "홈화면 조회 완료"),
+        @ApiResponse(responseCode = "401", description = "유저를 찾을 수 없습니다")
+    })
+    @GetMapping("/home")
+    public ResponseEntity<BaseResponse<HomeResponse>> getTodayHealthStatus(
+        @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        HomeResponse homeResponse = userService.getTodayHealthStatus(userDetails.getUsername());
+        return BaseResponse.ok("홈화면 조회 완료", homeResponse);
     }
 
 

@@ -1,5 +1,8 @@
 package cerberus.HealthCare.meal.service;
 
+import cerberus.HealthCare.meal.repository.MealRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import cerberus.HealthCare.logmeal.LogMealService;
 import cerberus.HealthCare.logmeal.FoodRecognitionResult;
 import cerberus.HealthCare.logmeal.NutritionInfo;
@@ -17,7 +20,18 @@ import java.io.IOException;
 @RequiredArgsConstructor // final field injection
 @Transactional(readOnly = true)
 public class MealService {
+
     private final LogMealService logMealService;
+    private final MealRepository mealRepository;
+
+    public long getTodayMealCount(Long userId) {
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();        // 00:00
+        LocalDateTime end = start.plusDays(1);             // 내일 00:00
+
+        return mealRepository.countByUserIdAndEatTimeBetween(userId, start, end);
+    }
 
     @Transactional
     public UploadImageResponse upload(UploadImageRequest uploadImageRequest) {

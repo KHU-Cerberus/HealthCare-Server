@@ -7,12 +7,15 @@ import cerberus.HealthCare.sleep.dto.CreateSleepResponse;
 import cerberus.HealthCare.sleep.dto.DeleteSleepRequest;
 import cerberus.HealthCare.sleep.dto.EditSleepRequest;
 import cerberus.HealthCare.sleep.dto.EditSleepResponse;
+import cerberus.HealthCare.sleep.dto.SleepDurationResponse;
 import cerberus.HealthCare.sleep.dto.SleepLog24HResponse;
 import cerberus.HealthCare.sleep.entity.SleepLog;
 import cerberus.HealthCare.sleep.repository.SleepRepository;
 import cerberus.HealthCare.user.entity.User;
 import cerberus.HealthCare.user.repository.UserRepository;
 import cerberus.HealthCare.user.service.ReportService;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -102,4 +105,22 @@ public class SleepService {
         log.info("[editSleep END] {}", Thread.currentThread().getName());
         return new EditSleepResponse(request.getSleepId(), request.getStart(), request.getEnd());
     }
+
+    public SleepDurationResponse getTodaySleep(Long userId) {
+
+        LocalDate today = LocalDate.now();
+        List<SleepLog> logs = sleepRepository.findSleepsEndedToday(userId, today);
+
+        long totalMinutes = 0;
+
+        for (SleepLog log : logs) {
+            totalMinutes += Duration.between(log.getStart(), log.getEndTime()).toMinutes();
+        }
+
+        long hours = totalMinutes / 60;
+        long minutes = totalMinutes % 60;
+
+        return new SleepDurationResponse(hours, minutes);
+    }
+
 }

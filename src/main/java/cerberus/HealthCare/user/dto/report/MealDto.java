@@ -20,13 +20,16 @@ public class MealDto {
     public static MealDto toMealDto(Meal meal) {
         List<MealItemDto> items = meal.getMealItems().stream()
             .map(i -> new MealItemDto(
-                i.getFoodName(),
-                i.getMass(),
-                i.getCalories(),
-                i.getCarbohydrate(),
-                i.getProtein(),
-                i.getFat(),
-                i.getRoughage()
+                i.getFoodName(),     // 음식명
+                i.getCalories(),     // 칼로리
+                i.getTotalFat(),    // 총 지방
+                i.getSaturatedFat(),    // 포화지방
+                i.getCholesterol(), //콜레스테롤
+                i.getSodium(),  // 나트륨
+                i.getTotalCarbs(),   // 탄수화물
+                i.getFiber(),         // 식이섬유
+                i.getSugar(),   // 당류
+                i.getProtein()      // 단백질
             ))
             .toList();
 
