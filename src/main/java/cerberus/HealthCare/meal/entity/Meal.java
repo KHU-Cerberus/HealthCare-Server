@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,10 +28,13 @@ public class Meal {
     @Column(name = "eat_time")
     private LocalDateTime eatTime;
 
-    @Column(name = "food_image", length = 500)
-    private String foodImage;
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MealItem> mealItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
-    private List<MealItem> mealItems;
+    // MealItem 추가 헬퍼 메서드
+    public void addMealItem(MealItem mealItem) {
+        mealItems.add(mealItem);
+        mealItem.setMeal(this);
+    }
 }
-

@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MealDto {
     private LocalDateTime eatTime;
-    private String foodImage;
     private List<MealItemDto> items;
 
     public static MealDto toMealDto(Meal meal) {
@@ -35,7 +34,6 @@ public class MealDto {
 
         return new MealDto(
             meal.getEatTime(),
-            meal.getFoodImage(),
             items
         );
     }

@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Tag(name = "음식 사진", description = "음식 사진 업로드/저장 API")
+@Tag(name = "음식 사진", description = "음식 사진 업로드 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/food")

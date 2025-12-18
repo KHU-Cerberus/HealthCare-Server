@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MealRepository extends JpaRepository<Meal, Long> {
     List<Meal> findByUserIdAndEatTimeBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
-    long countByUserIdAndEatTimeBetween(Long userId,
-        LocalDateTime start,
-        LocalDateTime end);
+    long countByUserIdAndEatTimeBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
 
 }
